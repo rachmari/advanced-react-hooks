@@ -4,13 +4,20 @@
 import React, { useReducer } from 'react'
 
 function countReducer(state, action) {
-  return action
+  if (typeof action === 'object') {
+    return {count: action.count}
+  }
+  return action(state)
 }
 
 function Counter({initialCount = 0, step = 1}) {
-  const [count, setCount] = useReducer(countReducer, initialCount)
+  const [state, setState] = useReducer(countReducer, {
+    count: initialCount,
+  })
+  const {count} = state
+  const increment = () =>
+  setState(currentState => ({count: currentState.count + step}))
 
-  const increment = () => setCount(count + step)
   return <button onClick={increment}>{count}</button>
 }
 
@@ -19,3 +26,5 @@ function App() {
 }
 
 export default App
+
+
